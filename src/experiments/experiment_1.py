@@ -8,7 +8,8 @@ class Experiment1(BaseExperiment):
         super().__init__(
             name="experiment_1",
             total_timesteps=100_000,
-            ppo_params={"learning_rate": 1e-4}  # Override default learning rate
+            env_name="simple_humanoid",
+            ppo_params={"learning_rate": 1e-4}
         )
 
 

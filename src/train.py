@@ -2,9 +2,10 @@ import logging
 
 import gymnasium as gym
 from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
-from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.vec_env import VecEnv
 
 from src.config import Config, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
 from src.models.ppo_model import create_ppo_model
@@ -33,12 +34,25 @@ def evaluate_model(model: PolicyPredictor, env: gym.Env, config: Config):
 
 
 def test_model(model: PolicyPredictor, env: gym.Env, config: Config):
-    obs, _ = env.reset()
+    if isinstance(env, VecEnv):
+        obs = env.reset()
+    else:
+        obs, _ = env.reset()
+    
     for _ in range(1000):
         action, _ = model.predict(obs, deterministic=True)
-        obs, reward, terminated, truncated, info = env.step(action)
+        if isinstance(env, VecEnv):
+            obs, reward, done, info = env.step(action)
+            terminated = done[0]
+            truncated = False  # VecEnv doesn't provide truncated information
+        else:
+            obs, reward, terminated, truncated, info = env.step(action)
+        
         if terminated or truncated:
-            obs, _ = env.reset()
+            if isinstance(env, VecEnv):
+                obs = env.reset()
+            else:
+                obs, _ = env.reset()
 
 
 def train(config: Config, env: gym.Env):
