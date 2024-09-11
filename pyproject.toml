@@ -1,0 +1,7 @@
+[project]
+name = "ppo-practice"
+version = "0.1.0"
+description = "Practice for PPO"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
