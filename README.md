@@ -37,6 +37,14 @@ uv run main.py
 
 This will execute the experiment defined in `experiments/experiment_1.py`.
 
+You can view the tensorboard logs by running:
+
+```bash
+tensorboard --logdir data/logs/tensorboard
+```
+
+and navigating to `http://localhost:6006` in your browser.
+
 ## Future Work
 
 - Integration with Isaac Sim for more realistic humanoid robot simulation.
