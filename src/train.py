@@ -1,19 +1,11 @@
 from stable_baselines3 import PPO
-from stable_baselines3.common.vec_env import DummyVecEnv
-from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
 from stable_baselines3.common.callbacks import EvalCallback
 
 from src.config import Config, MONITOR_FILE, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
-from src.environments.simple_humanoid import SimpleHumanoidEnv
+from src.environments.env_factory import create_env
 from src.models.ppo_model import create_ppo_model
-
-
-def setup_environment(_: Config) -> DummyVecEnv:
-    env = SimpleHumanoidEnv()
-    env = Monitor(env, str(MONITOR_FILE))
-    return DummyVecEnv([lambda: env])
 
 
 def train_model(env, config: Config) -> PPO:
@@ -49,8 +41,8 @@ def test_model(model: PolicyPredictor, env, config: Config):
                 obs = obs[0]
 
 
-def train(config: Config):
-    env = setup_environment(config)
+def train(config: Config, env_name: str):
+    env = create_env(config, env_name)
     model = train_model(env, config)
     evaluate_model(model, env, config)
     test_model(model, env, config)
