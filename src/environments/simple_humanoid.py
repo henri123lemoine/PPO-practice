@@ -1,9 +1,10 @@
-import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
 
+from src.environments.base_env import BaseEnv
 
-class SimpleHumanoidEnv(gym.Env):
+
+class SimpleHumanoidEnv(BaseEnv):
     def __init__(self):
         super().__init__()
         self.action_space = spaces.Box(low=-1, high=1, shape=(4,), dtype=np.float32)
