@@ -15,3 +15,11 @@ class BaseEnv(gym.Env, ABC):
     @abstractmethod
     def render(self):
         pass
+
+    @abstractmethod
+    def close(self):
+        pass
+
+    @abstractmethod
+    def seed(self, seed=None):
+        pass
