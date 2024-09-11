@@ -33,10 +33,10 @@ for p in (DATA_PATH, LOG_PATH, MODEL_PATH, CACHE_PATH, PLOTS_PATH):
 
 @dataclass
 class Config:
-    EXPERIMENT_NAME: str = "unconfigured"
-    TOTAL_TIMESTEPS: int = 100_000
-    EVAL_EPISODES: int = 10
-    PPO_PARAMS: dict[str, int | float] = field(default_factory=lambda: {
+    experiment_name: str = "unconfigured"
+    total_timesteps: int = 100_000
+    eval_episodes: int = 10
+    ppo_params: dict[str, int | float] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
         "n_steps": 2048,
         "batch_size": 64,

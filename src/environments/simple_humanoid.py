@@ -23,8 +23,15 @@ class SimpleHumanoidEnv(BaseEnv):
         self.state += action.repeat(2) * 0.1
         self.steps += 1
         reward = -np.sum(np.square(self.state))
-        done = self.steps >= 100
-        return self.state, reward, done, False, {}
+        terminated = self.steps >= 100
+        return self.state, reward, terminated, False, {}
 
     def render(self):
         return np.zeros((300, 400, 3), dtype=np.uint8)
+
+    def close(self):
+        pass
+
+    def seed(self, seed=None):
+        super().reset(seed=seed)
+        return [seed]

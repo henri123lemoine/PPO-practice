@@ -21,3 +21,6 @@ class MuJoCoHumanoidEnv(BaseEnv):
 
     def close(self):
         self.env.close()
+
+    def seed(self, seed=None):
+        return self.env.reset(seed=seed)

@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     # Choose which experiment to run
-    # experiment_1()
-    mujoco_experiment()
+    experiment_1()
+    # mujoco_experiment()
 
 
 if __name__ == "__main__":

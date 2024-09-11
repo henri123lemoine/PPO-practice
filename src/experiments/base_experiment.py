@@ -20,8 +20,8 @@ class BaseExperiment:
 
     def get_config(self) -> Config:
         return Config(
-            EXPERIMENT_NAME=self.name,
-            TOTAL_TIMESTEPS=self.total_timesteps,
-            EVAL_EPISODES=self.eval_episodes,
-            PPO_PARAMS=self.ppo_params
+            experiment_name=self.name,
+            total_timesteps=self.total_timesteps,
+            eval_episodes=self.eval_episodes,
+            ppo_params=self.ppo_params
         )

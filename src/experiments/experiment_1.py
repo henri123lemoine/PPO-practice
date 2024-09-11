@@ -1,4 +1,5 @@
 from src.train import train
+from src.environments.env_factory import create_env
 from src.experiments.base_experiment import BaseExperiment
 
 
@@ -14,7 +15,8 @@ class Experiment1(BaseExperiment):
 def main():
     experiment = Experiment1()
     config = experiment.get_config()
-    train(config, experiment.env_name)
+    env = create_env(config, experiment.env_name)
+    train(config, env)
 
 
 if __name__ == "__main__":

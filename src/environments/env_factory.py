@@ -17,5 +17,4 @@ def create_env(config: Config, env_name: str):
     else:
         raise ValueError(f"Unknown environment: {env_name}")
 
-    env = Monitor(env, str(MONITOR_FILE))
     return env
