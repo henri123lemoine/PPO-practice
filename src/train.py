@@ -6,7 +6,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
 from stable_baselines3.common.callbacks import EvalCallback
 
-from src.config import Config, MONITOR_FILE, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
+from src.config import Config, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
 from src.environments.env_factory import create_env
 from src.models.ppo_model import create_ppo_model
 
