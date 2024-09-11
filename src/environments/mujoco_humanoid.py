@@ -1,5 +1,7 @@
 import gymnasium as gym
+
 from src.environments.base_env import BaseEnv
+
 
 class MuJoCoHumanoidEnv(BaseEnv):
     def __init__(self):
