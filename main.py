@@ -1,7 +1,16 @@
+import os
+
 import gymnasium as gym
-from gymnasium import spaces
 import numpy as np
+from gymnasium import spaces
 from stable_baselines3 import PPO
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.evaluation import evaluate_policy
+from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.monitor import Monitor
+
+from settings import LOG_PATH
+
 
 class SimpleHumanoidEnv(gym.Env):
     def __init__(self):
@@ -10,6 +19,7 @@ class SimpleHumanoidEnv(gym.Env):
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(8,), dtype=np.float32)
         self.state = None
         self.steps = 0
+        self.render_mode = None
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -23,24 +33,50 @@ class SimpleHumanoidEnv(gym.Env):
         reward = -np.sum(np.square(self.state))  # Simple reward for being close to origin
         done = self.steps >= 100
         return self.state, reward, done, False, {}
-        
 
-def main():
-    # Create environment
-    env = SimpleHumanoidEnv()
-
-    # Create and train PPO model
-    model = PPO("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=10000)
-
-    # Test the trained model
-    obs, _ = env.reset()
-    for _ in range(100):
-        action, _states = model.predict(obs, deterministic=True)
-        obs, reward, done, _, info = env.step(action)
-        if done:
-            break
+    def render(self):
+        return np.zeros((300, 400, 3), dtype=np.uint8)  # blank image
 
 
-if __name__ == "__main__":
-    main()
+# Create directories
+model_dir = os.path.join(LOG_PATH, "models")
+os.makedirs(model_dir, exist_ok=True)
+
+# Create and wrap the environment
+env = SimpleHumanoidEnv()
+env = Monitor(env, os.path.join(LOG_PATH, "monitor.csv"))
+env = DummyVecEnv([lambda: env])
+
+# Set up callbacks
+eval_callback = EvalCallback(env, 
+                             best_model_save_path=os.path.join(model_dir, "best_model"),
+                             log_path=os.path.join(LOG_PATH, "results"), 
+                             eval_freq=2000,
+                             deterministic=True, 
+                             render=False)
+
+# Create and train PPO model
+model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=os.path.join(LOG_PATH, "tensorboard"))
+model.learn(total_timesteps=100000, callback=eval_callback)
+
+# Save the final model
+model.save(os.path.join(model_dir, "final_model"))
+
+# Evaluate the model
+mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=10)
+print(f"Mean reward: {mean_reward:.2f} +/- {std_reward:.2f}")
+
+# Test the trained model
+obs = env.reset()
+if isinstance(obs, tuple):
+    obs = obs[0]
+
+for _ in range(1000):
+    action, _states = model.predict(obs, deterministic=True)
+    obs, rewards, dones, infos = env.step(action)
+    if dones:
+        obs = env.reset()
+        if isinstance(obs, tuple):
+            obs = obs[0]
+
+env.close()
