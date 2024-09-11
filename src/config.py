@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from dotenv import load_dotenv
 from pathlib import Path
@@ -34,9 +34,9 @@ for p in (DATA_PATH, LOG_PATH, MODEL_PATH, CACHE_PATH, PLOTS_PATH):
 @dataclass
 class Config:
     EXPERIMENT_NAME: str = "unconfigured"
-
-    ## Default Hyperparameters
-    PPO_PARAMS: dict[str, int | float] = {
+    TOTAL_TIMESTEPS: int = 100_000
+    EVAL_EPISODES: int = 10
+    PPO_PARAMS: dict[str, int | float] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
         "n_steps": 2048,
         "batch_size": 64,
@@ -44,7 +44,4 @@ class Config:
         "gamma": 0.99,
         "gae_lambda": 0.95,
         "clip_range": 0.2,
-    }
-
-    TOTAL_TIMESTEPS: int = 100_000
-    EVAL_EPISODES: int = 10
+    })
