@@ -1,3 +1,6 @@
+import logging
+
+import gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
@@ -6,6 +9,8 @@ from stable_baselines3.common.callbacks import EvalCallback
 from src.config import Config, MONITOR_FILE, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
 from src.environments.env_factory import create_env
 from src.models.ppo_model import create_ppo_model
+
+logger = logging.getLogger(__name__)
 
 
 def train_model(env, config: Config) -> PPO:
@@ -25,7 +30,7 @@ def train_model(env, config: Config) -> PPO:
 
 def evaluate_model(model: PolicyPredictor, env, config: Config):
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=config.EVAL_EPISODES)
-    print(f"Mean reward: {mean_reward:.2f} +/- {std_reward:.2f}")
+    logger.info(f"Mean reward: {mean_reward:.2f} +/- {std_reward:.2f}")
 
 
 def test_model(model: PolicyPredictor, env, config: Config):
@@ -41,8 +46,7 @@ def test_model(model: PolicyPredictor, env, config: Config):
                 obs = obs[0]
 
 
-def train(config: Config, env_name: str):
-    env = create_env(config, env_name)
+def train(config: Config, env: gym.Env):
     model = train_model(env, config)
     evaluate_model(model, env, config)
     test_model(model, env, config)
