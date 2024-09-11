@@ -162,6 +162,26 @@ wheels = [
 ]
 
 [[package]]
+name = "gym"
+version = "0.26.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cloudpickle" },
+    { name = "gym-notices" },
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ab/b1/eb05a423eb801ab7d0715d6a3b28d92589e30b437052553df19ca2087240/gym-0.26.2.tar.gz", hash = "sha256:e0d882f4b54f0c65f203104c24ab8a38b039f1289986803c7d02cdbe214fbcc4", size = 721689 }
+
+[[package]]
+name = "gym-notices"
+version = "0.0.8"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b4/62/d312681b09cacf77d04237a2815653c58e5031998bb613ce114b85fc3f57/gym-notices-0.0.8.tar.gz", hash = "sha256:ad25e200487cafa369728625fe064e88ada1346618526102659b4640f2b4b911", size = 2685 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/25/26/d786c6bec30fe6110fd3d22c9a273a2a0e56c0b73b93e25ea1af5a53243b/gym_notices-0.0.8-py3-none-any.whl", hash = "sha256:e5f82e00823a166747b4c2a07de63b6560b1acb880638547e0cabf825a01e463", size = 2965 },
+]
+
+[[package]]
 name = "gymnasium"
 version = "0.29.1"
 source = { registry = "https://pypi.org/simple" }
@@ -552,6 +572,7 @@ name = "ppo-practice"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "gym" },
     { name = "gymnasium" },
     { name = "imageio" },
     { name = "mujoco" },
@@ -563,6 +584,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "gym", specifier = ">=0.26.2" },
     { name = "gymnasium", specifier = ">=0.29.1" },
     { name = "imageio", specifier = ">=2.35.1" },
     { name = "mujoco", specifier = ">=3.2.2" },
