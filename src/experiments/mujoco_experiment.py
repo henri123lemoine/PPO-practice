@@ -4,28 +4,18 @@ from src.environments.env_factory import create_env
 
 
 def main():
-    n_envs = 8
-    config = Config(
+    config = Config()
+    config.update(
         experiment_name="mujoco_humanoid",
-        env_name="mujoco_humanoid",
-
-        n_envs=n_envs,
-        total_timesteps=1_000_000,
-
-        monitor=True,
+        env_name="Humanoid-v4",
+        total_timesteps=2_000_000,
         record_video=True,
-        episode_trigger=lambda step: step % 100 == 0,
-
         train_params={
-            "learning_rate": 3e-4,
-            "n_steps": 2048 // n_envs,
-            "batch_size": 64,
-            "n_epochs": 10,
-            "gamma": 0.99,
-            "gae_lambda": 0.95,
-            "clip_range": 0.2,
-        },
+            "learning_rate": 2e-4,
+            "ent_coef": 0.01,
+        }
     )
+
     env = create_env(config)
     train(config, env)
 
