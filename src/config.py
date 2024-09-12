@@ -8,28 +8,18 @@ load_dotenv()
 
 
 # General
-DATE = datetime.now().strftime("%Y-%m-%d")
+DATE_TIME = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 PROJECT_PATH = Path(__file__).resolve().parent.parent
 IS_DEVELOPMENT = os.environ.get("ENVIRONMENT", "development").lower() in ("development", "dev", "d")
 
 # Data
 DATA_PATH = PROJECT_PATH / "data"
-LOG_PATH = DATA_PATH / "logs"
-MODEL_PATH = DATA_PATH / "models"
 CACHE_PATH = DATA_PATH / ".cache"
-PLOTS_PATH = DATA_PATH / "plots"
-
-# Training
-## Paths
-TENSORBOARD_LOG = LOG_PATH / "tensorboard"
-MONITOR_FILE = LOG_PATH / "monitor.csv"
-BEST_MODEL_PATH = MODEL_PATH / "best_model"
-FINAL_MODEL_PATH = MODEL_PATH / "final_model"
-
-# Create directories
-for p in (DATA_PATH, LOG_PATH, MODEL_PATH, CACHE_PATH, PLOTS_PATH):
-    if not p.exists():
-        os.makedirs(p, exist_ok=True)
+MODEL_PATH = DATA_PATH / "models"
+# Specific model path is determined by the experiment name and the date and time. E.g.:
+# "models/mujoco_humanoid/2021-08-14_14-23-00/"
+os.makedirs(CACHE_PATH, exist_ok=True)
+os.makedirs(MODEL_PATH, exist_ok=True)
 
 @dataclass
 class Config:
@@ -49,3 +39,31 @@ class Config:
         "gae_lambda": 0.95,
         "clip_range": 0.2,
     })
+
+    @property
+    def experiment_path(self) -> Path:
+        return MODEL_PATH / f"{self.experiment_name}_{DATE_TIME}"
+
+    @property
+    def tensorboard_log_path(self) -> Path:
+        path = self.experiment_path / "tensorboard"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    @property
+    def best_model_path(self) -> Path:
+        path = self.experiment_path / "best_model"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    @property
+    def final_model_path(self) -> Path:
+        path = self.experiment_path / "final_model"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    @property
+    def videos_path(self) -> Path:
+        path = self.experiment_path / "videos"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
