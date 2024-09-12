@@ -9,7 +9,7 @@ class MujocoExperiment(BaseExperiment):
             name="mujoco_humanoid",
             total_timesteps=1_000_000,
             env_name="mujoco_humanoid",
-            ppo_params={"learning_rate": 3e-4}
+            train_params={"learning_rate": 3e-4}
         )
 
 

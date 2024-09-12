@@ -7,7 +7,7 @@ class BaseExperiment:
     name: str
     total_timesteps: int = 100_000
     eval_episodes: int = 10
-    ppo_params: dict[str, int | float] = field(default_factory=lambda: {
+    train_params: dict[str, int | float] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
         "n_steps": 2048,
         "batch_size": 64,
@@ -23,5 +23,5 @@ class BaseExperiment:
             experiment_name=self.name,
             total_timesteps=self.total_timesteps,
             eval_episodes=self.eval_episodes,
-            ppo_params=self.ppo_params
+            train_params=self.train_params
         )

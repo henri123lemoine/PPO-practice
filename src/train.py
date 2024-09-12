@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def train_model(env, config: Config) -> PPO:
-    model = create_ppo_model(env, TENSORBOARD_LOG, config.ppo_params)
+    model = create_ppo_model(env, TENSORBOARD_LOG, config.train_params)
     eval_callback = EvalCallback(
         eval_env=env,
         best_model_save_path=BEST_MODEL_PATH,
