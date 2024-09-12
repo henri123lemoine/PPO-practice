@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from dotenv import load_dotenv
 from pathlib import Path
+from typing import Callable
 
 load_dotenv()
 
@@ -34,7 +35,9 @@ class Config:
     total_timesteps: int = 100_000
     eval_episodes: int = 10
     monitor: bool = False
+
     record_video: bool = True
+    episode_trigger: Callable[[int], bool] = lambda step_id: step_id % 20_000 == 0
 
     train_params: dict[str, int | float] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
