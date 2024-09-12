@@ -7,24 +7,24 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
 from stable_baselines3.common.vec_env import VecEnv
 
-from src.config import Config, TENSORBOARD_LOG, BEST_MODEL_PATH, LOG_PATH, FINAL_MODEL_PATH
+from src.config import Config
 from src.models.ppo_model import create_ppo_model
 
 logger = logging.getLogger(__name__)
 
 
 def train_model(env, config: Config) -> PPO:
-    model = create_ppo_model(env, TENSORBOARD_LOG, config.train_params)
+    model = create_ppo_model(env, config)
     eval_callback = EvalCallback(
         eval_env=env,
-        best_model_save_path=BEST_MODEL_PATH,
-        log_path=LOG_PATH,
+        best_model_save_path=config.best_model_path,
+        log_path=config.tensorboard_log_path,
         eval_freq=2000,
         deterministic=True,
         render=False
     )
     model.learn(total_timesteps=config.total_timesteps, callback=eval_callback)
-    model.save(FINAL_MODEL_PATH)
+    model.save(config.final_model_path)
     return model
 
 
@@ -42,11 +42,11 @@ def test_model(model: PolicyPredictor, env: gym.Env, config: Config):
     for _ in range(1000):
         action, _ = model.predict(obs, deterministic=True)
         if isinstance(env, VecEnv):
-            obs, reward, done, info = env.step(action)
+            obs, _, done, _ = env.step(action)
             terminated = done[0]
             truncated = False  # VecEnv doesn't provide truncated information
         else:
-            obs, reward, terminated, truncated, info = env.step(action)
+            obs, _, terminated, truncated, _ = env.step(action)
         
         if terminated or truncated:
             if isinstance(env, VecEnv):

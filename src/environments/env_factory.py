@@ -11,7 +11,7 @@ def create_env(config: Config, env_name: str):
     if env_name == "simple_humanoid":
         env = SimpleHumanoidEnv()
     elif env_name == "mujoco_humanoid":
-        # env = MuJoCoHumanoidEnv()
+        # env = MuJoCoHumanoidEnv()  # this didn't work because it doesn't behave sufficiently like any other gym environments
         env = gym.make("Humanoid-v4", render_mode="rgb_array")
     else:
         raise ValueError(f"Unknown environment: {env_name}")
