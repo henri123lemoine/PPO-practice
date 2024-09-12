@@ -34,9 +34,9 @@ class Config:
     total_timesteps: int = 1_000_000
     eval_episodes: int = 10
 
-    monitor: bool = True
+    # Video recording settings
     record_video: bool = True
-    record_video_trigger: Callable[[int], bool] = lambda episode: episode % 200 == 0
+    record_video_freq: int = 200
     record_video_length: int = 500
 
     train_params: Dict[str, Any] = field(default_factory=lambda: {
@@ -78,5 +78,7 @@ class Config:
         for key, value in kwargs.items():
             if key == "train_params":
                 self.train_params.update(value)
-            else:
+            elif hasattr(self, key):
                 setattr(self, key, value)
+            else:
+                raise ValueError(f"Unknown configuration parameter: {key}")

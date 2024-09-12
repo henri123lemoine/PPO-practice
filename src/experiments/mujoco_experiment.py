@@ -14,6 +14,8 @@ def main():
         env_name="Humanoid-v4",
         total_timesteps=2_000_000,
         record_video=True,
+        record_video_freq=200,
+        record_video_length=500,
         train_params={
             "learning_rate": 2e-4,
             "ent_coef": 0.01,

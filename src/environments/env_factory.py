@@ -13,7 +13,7 @@ def make_env(config: Config):
         env = simple_humanoid.SimpleHumanoidEnv()
     else:
         if config.env_name in envs.registry.keys():
-            env = gym.make(config.env_name)
+            env = gym.make(config.env_name, render_mode="rgb_array")
         else:
             raise ValueError(f"Unknown environment: {config.env_name}")
     env = Monitor(env)
@@ -26,12 +26,12 @@ def create_env(config: Config):
         n_envs=config.n_envs,
         seed=config.seed,
     )
+    print(config)
     if config.record_video:
         env = VecVideoRecorder(
             env,
             video_folder=str(config.videos_path),
-            record_video_trigger=config.record_video_trigger,
+            record_video_trigger=lambda x: x % (config.record_video_freq * config.n_envs) == 0,
             video_length=config.record_video_length,
-            name_prefix=None,
         )
     return env
