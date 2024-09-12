@@ -1,11 +1,13 @@
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
-from dotenv import load_dotenv
 from pathlib import Path
 from typing import Callable, Dict, Any
 
+from dotenv import load_dotenv
+
 load_dotenv()
+
 
 # General
 DATE_TIME = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -20,6 +22,7 @@ EXPERIMENTS_PATH = DATA_PATH / "experiments"
 
 for path in [TENSORBOARD_PATH, CACHE_PATH, EXPERIMENTS_PATH]:
     os.makedirs(path, exist_ok=True)
+
 
 @dataclass
 class Config:

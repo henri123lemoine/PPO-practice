@@ -2,7 +2,7 @@ import logging
 
 import gymnasium as gym
 from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.callbacks import EvalCallback, CallbackList
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
 from stable_baselines3.common.vec_env import VecEnv
@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 def train_model(env, config: Config) -> PPO:
     model = create_ppo_model(env, config)
+
+    # Callbacks
     eval_callback = EvalCallback(
         eval_env=env,
         best_model_save_path=config.best_model_path,
@@ -23,7 +25,13 @@ def train_model(env, config: Config) -> PPO:
         deterministic=True,
         render=False,
     )
-    model.learn(total_timesteps=config.total_timesteps, callback=eval_callback)
+    callback = CallbackList([eval_callback])
+
+    model.learn(
+        total_timesteps=config.total_timesteps,
+        callback=callback,
+        tb_log_name=config.experiment_name,
+    )
     model.save(config.final_model_path)
     return model
 
