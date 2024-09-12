@@ -13,9 +13,8 @@ def main():
         experiment_name="mujoco_humanoid",
         env_name="Humanoid-v4",
         total_timesteps=20_000_000,
-        record_video=False,
-        # record_video=True,
-        # record_video_freq=100_000,
+        record_video=True,
+        record_video_freq=20,
     )
 
     logger.info(f"Running experiment: {config.experiment_name}")

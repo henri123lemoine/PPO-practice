@@ -1,3 +1,5 @@
+import logging
+
 import gymnasium as gym
 from gymnasium import envs
 from stable_baselines3.common.env_util import make_vec_env
@@ -6,6 +8,8 @@ from stable_baselines3.common.vec_env import VecVideoRecorder
 
 from src.config import Config
 from src.environments import simple_humanoid
+
+logger = logging.getLogger(__name__)
 
 
 def make_env(config: Config):
@@ -29,7 +33,8 @@ def create_env(config: Config):
         n_envs=config.n_envs,
         seed=config.seed,
     )
-    print(config)
+    logger.info(f"Created environment with {config.n_envs} parallel envs")
+
     if config.record_video:
         env = VecVideoRecorder(
             env,

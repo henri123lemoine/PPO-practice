@@ -1,4 +1,5 @@
 import os
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -7,6 +8,7 @@ from typing import Callable, Dict, Any
 from dotenv import load_dotenv
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 
 # General
@@ -63,10 +65,22 @@ class Config:
         self.train_params["n_steps"] = self.train_params["n_steps"] // self.n_envs
 
     @property
-    def record_video_trigger(self) -> Callable[[int], bool] | None:
-        if not self.record_video:
-            return None
-        return lambda x: x % self.record_video_freq == 0
+    def record_video_trigger_interval(self) -> int:
+        num_steps_per_ep = 100
+        trigger_interval = self.total_timesteps // self.record_video_freq
+        return trigger_interval
+
+    @property
+    def record_video_trigger(self) -> Callable[[int], bool]:
+        logger.info(f"Setting up video recording. Trigger interval: {self.record_video_trigger_interval}")
+        def debug_trigger(x):
+            # Divide x by n_envs to get the actual global step count
+            global_step = x // self.n_envs
+            should_record = global_step % self.record_video_trigger_interval == 0
+            if should_record:
+                logger.debug(f"Recording video at step {x}")
+            return should_record
+        return debug_trigger
 
     @property
     def experiment_path(self) -> Path:
