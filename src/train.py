@@ -19,7 +19,7 @@ def train_model(env, config: Config) -> PPO:
         eval_env=env,
         best_model_save_path=config.best_model_path,
         log_path=TENSORBOARD_PATH,
-        eval_freq=config.total_timesteps // config.eval_episodes,
+        eval_freq=max(10000 // config.n_envs, 1),
         deterministic=True,
         render=False,
     )

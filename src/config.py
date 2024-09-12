@@ -37,7 +37,7 @@ class Config:
     monitor: bool = False
 
     record_video: bool = True
-    episode_trigger: Callable[[int], bool] = lambda step_id: step_id % 20_000 == 0
+    episode_trigger: Callable[[int], bool] = lambda episode: episode % 200 == 0
 
     train_params: dict[str, int | float] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
