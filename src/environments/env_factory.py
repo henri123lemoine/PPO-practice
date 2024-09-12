@@ -31,7 +31,7 @@ def create_env(config: Config):
         env = VecVideoRecorder(
             env,
             video_folder=str(config.videos_path),
-            record_video_trigger=lambda x: x % (config.record_video_freq * config.n_envs) == 0,
+            record_video_trigger=lambda x: x % ((config.total_timesteps * config.n_envs) // config.record_video) == 0,
             video_length=config.record_video_length,
         )
     return env

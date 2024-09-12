@@ -1,6 +1,6 @@
 from stable_baselines3 import PPO
 
-from src.config import Config, TENSORBOARD_PATH
+from src.config import Config
 
 
 def create_ppo_model(env, config: Config) -> PPO:
@@ -18,6 +18,6 @@ def create_ppo_model(env, config: Config) -> PPO:
         "MlpPolicy",
         env,
         verbose=1,
-        tensorboard_log=TENSORBOARD_PATH,
+        tensorboard_log=config.tensorboard_path,
         **config.train_params
     )

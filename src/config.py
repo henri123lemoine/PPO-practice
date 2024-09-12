@@ -17,10 +17,9 @@ IS_DEVELOPMENT = os.environ.get("ENVIRONMENT", "development").lower() in ("devel
 # Data
 DATA_PATH = PROJECT_PATH / "data"
 CACHE_PATH = DATA_PATH / ".cache"
-TENSORBOARD_PATH = DATA_PATH / "tensorboard"
 EXPERIMENTS_PATH = DATA_PATH / "experiments"
 
-for path in [TENSORBOARD_PATH, CACHE_PATH, EXPERIMENTS_PATH]:
+for path in [CACHE_PATH, EXPERIMENTS_PATH]:
     os.makedirs(path, exist_ok=True)
 
 
@@ -60,19 +59,27 @@ class Config:
 
     @property
     def experiment_path(self) -> Path:
-        return EXPERIMENTS_PATH / self.experiment_name / f"run_{DATE_TIME}"
+        return EXPERIMENTS_PATH / self.experiment_name
+
+    @property
+    def run_path(self) -> Path:
+        return self.experiment_path / f"run_{DATE_TIME}"
+
+    @property
+    def tensorboard_path(self) -> Path:
+        return self.experiment_path / "tensorboard"
 
     @property
     def best_model_path(self) -> Path:
-        return self.experiment_path / "best_model"
+        return self.run_path / "best_model"
 
     @property
     def final_model_path(self) -> Path:
-        return self.experiment_path / "final_model"
+        return self.run_path / "final_model"
 
     @property
     def videos_path(self) -> Path:
-        return self.experiment_path / "videos"
+        return self.run_path / "videos"
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
