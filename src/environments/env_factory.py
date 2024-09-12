@@ -1,21 +1,24 @@
 import gymnasium as gym
+from gymnasium import envs
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import VecVideoRecorder
 
 from src.config import Config
-from src.environments import simple_humanoid, mujoco_humanoid
+from src.environments import simple_humanoid
 
 
 def make_env(config: Config):
     if config.env_name == "simple_humanoid":
         env = simple_humanoid.SimpleHumanoidEnv()
-    elif config.env_name == "Humanoid-v4":
-        env = gym.make("Humanoid-v4", render_mode="rgb_array")
     else:
-        raise ValueError(f"Unknown environment: {config.env_name}")
+        if config.env_name in envs.registry.keys():
+            env = gym.make(config.env_name)
+        else:
+            raise ValueError(f"Unknown environment: {config.env_name}")
     env = Monitor(env)
     return env
+
 
 def create_env(config: Config):
     env = make_vec_env(
