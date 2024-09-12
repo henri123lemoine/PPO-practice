@@ -137,7 +137,7 @@ cython_debug/
 
 # Miscellanous
 data/*
-!data/.keep
+!.keep
 
 misc/
 logs/
