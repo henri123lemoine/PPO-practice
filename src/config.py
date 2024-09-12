@@ -28,14 +28,14 @@ class Config:
     experiment_name: str = "not-configured"
     env_name: str = "not-configured"
 
-    n_envs: int = 8
+    n_envs: int = 4
     seed: int = 42
     total_timesteps: int = 1_000_000
     eval_episodes: int = 10
 
     # Video recording settings
     record_video: bool = True
-    record_video_freq: int = 200
+    record_video_freq: int = 50
     record_video_length: int = 500
 
     train_params: Dict[str, Any] = field(default_factory=lambda: {

@@ -50,7 +50,7 @@ uv run main.py --experiment mujoco_humanoid
 You can view the tensorboard logs by running:
 
 ```bash
-tensorboard --logdir data/logs/tensorboard
+tensorboard --logdir data/experiments/[experiment_name]/tensorboard
 ```
 
 Then navigate to `http://localhost:6006` in your browser.
