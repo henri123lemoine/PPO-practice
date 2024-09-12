@@ -23,8 +23,8 @@ for path in [TENSORBOARD_PATH, CACHE_PATH, EXPERIMENTS_PATH]:
 
 @dataclass
 class Config:
-    experiment_name: str = "default_experiment"
-    env_name: str = "Humanoid-v4"
+    experiment_name: str = "not-configured"
+    env_name: str = "not-configured"
 
     n_envs: int = 8
     seed: int = 42
