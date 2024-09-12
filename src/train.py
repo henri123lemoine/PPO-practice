@@ -7,7 +7,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.type_aliases import PolicyPredictor
 from stable_baselines3.common.vec_env import VecEnv
 
-from src.config import Config
+from src.config import Config, TENSORBOARD_PATH
 from src.models.ppo_model import create_ppo_model
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ def train_model(env, config: Config) -> PPO:
     eval_callback = EvalCallback(
         eval_env=env,
         best_model_save_path=config.best_model_path,
-        log_path=config.tensorboard_log_path,
+        log_path=TENSORBOARD_PATH,
         eval_freq=2000,
         deterministic=True,
         render=False
