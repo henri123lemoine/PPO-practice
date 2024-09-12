@@ -21,9 +21,10 @@ def train_model(env, config: Config) -> PPO:
         eval_env=env,
         best_model_save_path=config.best_model_path,
         log_path=config.tensorboard_path,
-        eval_freq=max(10000 // config.n_envs, 1),
+        eval_freq=max(config.eval_freq // config.n_envs, 1),
         deterministic=True,
         render=False,
+        verbose=config.verbose,
     )
     callback = CallbackList([eval_callback])
 

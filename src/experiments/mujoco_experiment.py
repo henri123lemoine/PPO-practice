@@ -12,14 +12,10 @@ def main():
     config.update(
         experiment_name="mujoco_humanoid",
         env_name="Humanoid-v4",
-        total_timesteps=2_000_000,
-        record_video=True,
-        record_video_freq=20,
-        record_video_length=500,
-        train_params={
-            "learning_rate": 2e-4,
-            "ent_coef": 0.01,
-        }
+        total_timesteps=20_000_000,
+        record_video=False,
+        # record_video=True,
+        # record_video_freq=100_000,
     )
 
     logger.info(f"Running experiment: {config.experiment_name}")

@@ -27,16 +27,21 @@ for path in [CACHE_PATH, EXPERIMENTS_PATH]:
 class Config:
     experiment_name: str = "not-configured"
     env_name: str = "not-configured"
+    verbose: int = 0
 
     n_envs: int = 4
     seed: int = 42
     total_timesteps: int = 1_000_000
+
+    # Evaluation settings
     eval_episodes: int = 10
+    eval_freq: int = 50_000
 
     # Video recording settings
     record_video: bool = True
-    record_video_freq: int = 50
-    record_video_length: int = 500
+    record_video_freq: int = 100_000
+    record_video_length: int = 200
+    render_mode: str = "rgb_array"
 
     train_params: Dict[str, Any] = field(default_factory=lambda: {
         "learning_rate": 3e-4,
@@ -56,6 +61,12 @@ class Config:
 
     def __post_init__(self):
         self.train_params["n_steps"] = self.train_params["n_steps"] // self.n_envs
+
+    @property
+    def record_video_trigger(self) -> Callable[[int], bool] | None:
+        if not self.record_video:
+            return None
+        return lambda x: x % self.record_video_freq == 0
 
     @property
     def experiment_path(self) -> Path:

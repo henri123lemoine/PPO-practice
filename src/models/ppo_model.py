@@ -17,7 +17,7 @@ def create_ppo_model(env, config: Config) -> PPO:
     return PPO(
         "MlpPolicy",
         env,
-        verbose=1,
+        verbose=config.verbose,
         tensorboard_log=config.tensorboard_path,
         **config.train_params
     )
